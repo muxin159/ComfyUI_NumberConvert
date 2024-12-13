@@ -5,6 +5,7 @@ Currently, there are two versions: Chinese and English.
 Chinese Version Functions:
 
 Conversion of pure digits into individual Chinese characters.
+
 Conversion of numbers with units as a whole.
 Conversion of percentages.
 Conversion of years as a whole.
