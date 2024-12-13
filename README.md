@@ -1,4 +1,4 @@
-A plugin for converting Arabic numeral digits to their written text form, which is both easy to install and use. The main functionality is to convert various forms of numerical content into language forms that are more in line with people's daily life habits. The purpose is to pair with various TTS systems for reading AI-generated numbers aloud.
+A plugin for converting Arabic numeral digits to their written text form, which is both easy to install and use. The main functionality is to convert various forms of numerical content into language forms that are more in line with people's daily life habits. The purpose is to pair with various TTS systems for reading numbers aloud.
 
 Currently, there are two versions: Chinese and English.
 
