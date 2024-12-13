@@ -68,9 +68,16 @@ def convert_dot_to_point(text):
 def convert_slash_to_per(text):
     return re.sub(r'(\w+)\s*/\s*(\w+)', r'\1每\2', text)
 
+# 处理带小数点的阿拉伯数字，和百分比处理相同
+def handle_decimal_numbers(text):
+    # 处理小数部分
+    text = re.sub(r'(\d+)\.(\d+)', lambda m: f"{arabic_to_chinese(m.group(1), full_form=False)}点{convert_decimal_part(m.group(2))}", text)
+    return text
+
 # 转换主函数
 def convert_numbers_in_text(text, units):
     text = handle_special_cases(text)
+    text = handle_decimal_numbers(text)  # 新增：处理带小数点的阿拉伯数字
     units_pattern = r'(\d+)(?=(' + '|'.join(units) + r'))'
     text = re.sub(units_pattern, lambda m: replace_with_units(m, units), text)
     text = re.sub(r'(\d+)(?=\D|$)', handle_pure_numbers, text)
@@ -104,14 +111,26 @@ class ConvertNumbersNode:
 
     def convert_text(self, text_input, additional_units):
         # 处理外部单位列表
+        global units  # 确保可以修改原始的单位列表
+        default_units = [
+            "元", "米", "厘米", "毫米", "千米", "英尺", "加仑", "升", "毫升", 
+            "公斤", "瓦", "度", "秒", "分钟", "小时", "天", "月", "日", "种"
+        ]
+        
         if additional_units:
             # 将外部单位字符串转换成列表
             additional_units_list = [unit.strip() for unit in additional_units.split(",")]
             # 合并到默认单位列表
-            global units
-            units = list(set(units + additional_units_list))  # 防止重复单位
+            units = list(set(default_units + additional_units_list))  # 防止重复单位
+        else:
+            units = default_units  # 如果没有额外的单位，恢复到默认单位列表
+
         # Convert the numbers in the input text to Chinese
         converted_text = convert_numbers_in_text(text_input, units)
+
+        # 完成转换后重置单位列表
+        units = default_units
+
         return (converted_text,)  # Return the converted text as output
 
 
