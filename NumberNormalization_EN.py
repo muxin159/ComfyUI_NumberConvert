@@ -91,6 +91,12 @@ def process_decimal_large(text):
                   lambda m: f"{number_to_words(int(m.group(1)))} point {' '.join(number_to_words(int(digit)) for digit in m.group(2))}",
                   text)
 
+def process_decimal_numbers(text):
+    """Convert decimal numbers without percentage"""
+    return re.sub(r'(\d+)\.(\d+)', 
+                  lambda m: f"{number_to_words(int(m.group(1)))} point {process_decimal_part(m.group(2))}",
+                  text)
+
 def process_pure_number(text):
     """Convert pure numbers (no units or nouns) to word-by-word"""
     return re.sub(r'\b\d+\b', 
@@ -102,6 +108,7 @@ def process_text(text):
     text = process_percentage(text)
     text = process_number_with_unit(text)
     text = process_decimal_large(text)
+    text = process_decimal_numbers(text)  # Adding the new function for decimal numbers
     text = process_pure_number(text)
     return text
 
